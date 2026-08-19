@@ -1,0 +1,1 @@
+console.log("KhadBhandu website loaded successfully.");
