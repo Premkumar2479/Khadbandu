@@ -132,7 +132,7 @@ require_once "config/database.php";
                                 <span class="product-category">
                                     <?= htmlspecialchars($product['category_name']) ?>
                                 </span>
-
+                    <Div>   dfsf 
                             </div>
 
 
