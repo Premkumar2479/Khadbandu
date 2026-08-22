@@ -1,5 +1,16 @@
 <?php
 
+
+// <?php
+
+require_once "includes/admin-auth.php";
+
+require_once "../config/database.php";
+
+$pageTitle = "Orders - KhadBhandu";
+
+
+
 session_start();
 
 require_once "../config/database.php";

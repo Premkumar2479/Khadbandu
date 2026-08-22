@@ -11,9 +11,11 @@ require_once "config/database.php";
 <?php include "includes/navbar.php"; ?>
 
 
+
+
 <!-- HERO SECTION -->
 
-<section class="hero-section">
+<!-- <section class="hero-section">
 
     <div class="container">
 
@@ -87,7 +89,154 @@ require_once "config/database.php";
 
     </div>
 
-</section>
+</section> -->
+
+
+<!-- HERO IMAGE SLIDER -->
+
+<div class="col-lg-6">
+    <div
+        id="heroCarousel"
+        class="carousel slide hero-slider"
+        data-bs-ride="carousel"
+        data-bs-interval="3500"
+    >
+
+        <div class="carousel-inner rounded-4 overflow-hidden">
+
+            <!-- SLIDE 1 -->
+
+            <div class="carousel-item active">
+
+                <img
+                    src="assets/images/hero/hero-1.jpg"
+                    class="d-block w-100"
+                    alt="Smart Farming"
+                >
+
+                <div class="hero-slide-caption">
+
+                    <h3>
+                        Quality Farming Products
+                    </h3>
+
+                    <p>
+                        Everything farmers need in one place.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SLIDE 2 -->
+
+            <div class="carousel-item">
+
+                <img
+                    src="assets/images/hero/hero-2.jpg"
+                    class="d-block w-100"
+                    alt="Agriculture"
+                >
+
+                <div class="hero-slide-caption">
+
+                    <h3>
+                        Better Seeds
+                    </h3>
+
+                    <p>
+                        Grow healthier and stronger crops.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SLIDE 3 -->
+
+            <div class="carousel-item">
+
+                <img
+                    src="assets/images/hero/hero-3.jpg"
+                    class="d-block w-100"
+                    alt="Farming"
+                >
+
+                <div class="hero-slide-caption">
+
+                    <h3>
+                        Smart Farming
+                    </h3>
+
+                    <p>
+                        Better products. Better harvest.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREVIOUS -->
+
+        <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#heroCarousel"
+            data-bs-slide="prev"
+        >
+
+            <span class="carousel-control-prev-icon"></span>
+
+        </button>
+
+
+        <!-- NEXT -->
+
+        <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#heroCarousel"
+            data-bs-slide="next"
+        >
+
+            <span class="carousel-control-next-icon"></span>
+
+        </button>
+
+
+        <!-- DOTS -->
+
+        <div class="carousel-indicators">
+
+            <button
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide-to="0"
+                class="active"
+            ></button>
+
+            <button
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide-to="1"
+            ></button>
+
+            <button
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide-to="2"
+            ></button>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 <!-- =========================================================
