@@ -98,7 +98,7 @@ $blogs = $conn->query(
     <meta name="viewport"
           content="width=device-width, initial-scale=1">
 
-    <title>Blogs - KhadBhandu Admin</title>
+    <title>Blogs - KisanSaathi Admin</title>
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -122,7 +122,7 @@ $blogs = $conn->query(
             href="index.php"
             class="admin-brand">
 
-            🌾 KhadBhandu Admin
+            🌾 KisanSaathi Admin
 
         </a>
 
@@ -191,7 +191,7 @@ $blogs = $conn->query(
                 <input
                     type="text"
                     name="author"
-                    value="KhadBhandu Team"
+                    value="KisanSaathi Team"
                     class="form-control"
                 >
 

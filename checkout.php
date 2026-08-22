@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php
 
-$pageTitle = "Checkout - KhadBhandu";
+$pageTitle = "Checkout - KisanSaathi";
 
 include "includes/header.php";
 include "includes/navbar.php";

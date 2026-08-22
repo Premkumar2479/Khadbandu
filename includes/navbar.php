@@ -19,7 +19,7 @@ $userName = $_SESSION['user_name'] ?? '';
                 <i class="bi bi-flower1"></i>
             </span>
 
-            Khad<span>Bhandu</span>
+            <span>KisanSaathi</span>
 
         </a>
 

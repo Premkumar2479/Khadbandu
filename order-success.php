@@ -29,7 +29,7 @@ include "includes/navbar.php";
 </h1>
 
 <p class="text-muted">
-    Thank you for shopping with KhadBhandu.
+    Thank you for shopping with KisanSaathi.
 </p>
 
 <p>

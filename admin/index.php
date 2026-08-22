@@ -19,7 +19,7 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 
-$pageTitle = "Admin Dashboard - KhadBhandu";
+$pageTitle = "Admin Dashboard - KisanSaathi";
 
 
 /*
@@ -222,7 +222,7 @@ include "includes/sidebar.php";
 
             <p>
 
-                Here's what's happening with your KhadBhandu store today.
+                Here's what's happening with your KisanSaathi store today.
 
             </p>
 

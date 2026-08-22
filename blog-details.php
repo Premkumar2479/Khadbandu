@@ -86,7 +86,7 @@ if (!$blog) {
 
 $pageTitle =
     $blog['title'] .
-    " - KhadBhandu";
+    " - KisanSaathi";
 
 ?>
 

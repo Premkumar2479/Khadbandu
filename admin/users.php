@@ -35,7 +35,7 @@ $result = $conn->query(
     <meta name="viewport"
           content="width=device-width, initial-scale=1">
 
-    <title>Users - KhadBhandu Admin</title>
+    <title>Users - KisanSaathi Admin</title>
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -58,7 +58,7 @@ $result = $conn->query(
         <a href="index.php"
            class="admin-brand">
 
-            🌾 KhadBhandu Admin
+            🌾 KisanSaathi Admin
 
         </a>
 

@@ -20,7 +20,7 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 
-$pageTitle = "Analytics - KhadBhandu";
+$pageTitle = "Analytics - KisanSaathi";
 
 
 /*
@@ -314,7 +314,7 @@ include "includes/sidebar.php";
 
             <p>
 
-                Monitor your KhadBhandu store performance.
+                Monitor your KisanSaathi store performance.
 
             </p>
 

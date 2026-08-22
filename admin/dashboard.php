@@ -97,7 +97,7 @@ $totalUsers =
     >
 
     <title>
-        Admin Dashboard - KhadBhandu
+        Admin Dashboard - KisanSaathi
     </title>
 
 
@@ -134,7 +134,7 @@ $totalUsers =
             class="navbar-brand fw-bold"
         >
 
-            🌱 KhadBhandu Admin
+            🌱 KisanSaathi Admin
 
         </a>
 
@@ -191,7 +191,7 @@ $totalUsers =
             <p
                 class="text-muted"
             >
-                Manage your KhadBhandu store.
+                Manage your KisanSaathi store.
             </p>
 
         </div>

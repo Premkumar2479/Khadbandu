@@ -72,7 +72,7 @@ $items = $itemStmt->get_result();
 
 <?php
 
-$pageTitle = "Order #" . $orderId . " - KhadBhandu";
+$pageTitle = "Order #" . $orderId . " - KisanSaathi";
 
 include "includes/header.php";
 include "includes/navbar.php";

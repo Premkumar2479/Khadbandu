@@ -61,7 +61,7 @@ if (!$product) {
 }
 
 
-$pageTitle = $product['name'] . " - KhadBhandu";
+$pageTitle = $product['name'] . " - KisanSaathi";
 
 
 /*
@@ -219,7 +219,7 @@ if ($reviewStmt) {
                         <small class="detail-brand">
 
                             <?= htmlspecialchars(
-                                $product['brand'] ?? 'KhadBhandu'
+                                $product['brand'] ?? 'KisanSaathi'
                             ) ?>
 
                         </small>

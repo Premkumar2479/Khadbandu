@@ -194,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <?php
 
 $pageTitle =
-    "Create Account - KhadBhandu";
+    "Create Account - KisanSaathi";
 
 include "includes/header.php";
 
@@ -227,7 +227,7 @@ include "includes/navbar.php";
 
 
                 <p>
-                    Join KhadBhandu today
+                    Join KisanSaathi today
                 </p>
 
             </div>

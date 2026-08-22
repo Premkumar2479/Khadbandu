@@ -1,6 +1,6 @@
 <?php
 
-$pageTitle = "KhadBhandu - Smart Farming, Better Harvest";
+$pageTitle = "KisanSaathi - Smart Farming, Better Harvest";
 
 require_once "config/database.php";
 
@@ -511,7 +511,7 @@ require_once "config/database.php";
 
 </section>
 
-<!-- WHY KHADBhandu -->
+<!-- WHY  KisanSaathi-->
 
 <section class="why-section py-5">
 
@@ -522,7 +522,7 @@ require_once "config/database.php";
             <!-- <span>WHY US</span> -->
 
             <h2>
-                Why Choose KhadBhandu?
+                Why Choose KisanSaathi?
             </h2>
 
         </div>

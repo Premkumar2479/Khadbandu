@@ -125,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <?php
 
-$pageTitle = "Login - KhadBhandu";
+$pageTitle = "Login - KisanSaathi";
 
 include "includes/header.php";
 
@@ -156,7 +156,7 @@ include "includes/navbar.php";
 
 
                 <p>
-                    Login to your KhadBhandu account
+                    Login to your KisanSaathi account
                 </p>
 
             </div>

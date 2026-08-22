@@ -4,7 +4,7 @@ session_start();
 
 require_once "config/database.php";
 
-$pageTitle = "Categories - KhadBhandu";
+$pageTitle = "Categories - KisanSaathi";
 
 
 /*
@@ -71,7 +71,7 @@ if ($categoryId > 0) {
 
 
     $pageTitle =
-        $category['name'] . " - KhadBhandu";
+        $category['name'] . " - KisanSaathi";
 
 
     /*
@@ -126,7 +126,7 @@ if ($categoryId > 0) {
             <div class="category-page-header text-center mb-5">
 
                 <span class="section-label">
-                    KHADBHANDU
+                    KISANSAATHI
                 </span>
 
                 <h1>

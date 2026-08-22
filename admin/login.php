@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     >
 
     <title>
-        Admin Login - KhadBhandu
+        Admin Login - KisanSaathi
     </title>
 
 
@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <h2
                             class="fw-bold text-success"
                         >
-                            🌱 KhadBhandu
+                            🌱 KisanSaathi
                         </h2>
 
                         <p
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 type="email"
                                 name="email"
                                 class="form-control"
-                                placeholder="admin@khadbhandu.com"
+                                placeholder="admin@KisanSaathi.com"
                                 required
                             >
 
@@ -260,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             class="text-decoration-none"
                         >
 
-                            ← Back to KhadBhandu
+                            ← Back to KisanSaathi
 
                         </a>
 

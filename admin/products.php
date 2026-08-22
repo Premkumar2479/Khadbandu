@@ -25,7 +25,7 @@ if (!isset($_SESSION['admin_id'])) {
 |--------------------------------------------------------------------------
 */
 
-$pageTitle = "Manage Products - KhadBhandu";
+$pageTitle = "Manage Products - KisanSaathi";
 
 
 /*

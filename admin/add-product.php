@@ -407,7 +407,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     >
 
     <title>
-        Add Product - KhadBhandu Admin
+        Add Product - KisanSaathi Admin
     </title>
 
 
@@ -440,7 +440,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             class="navbar-brand fw-bold"
         >
 
-            🌱 KhadBhandu Admin
+            🌱 KisanSaathi Admin
 
         </a>
 
@@ -499,7 +499,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <p class="text-muted">
 
-                    Add a new agricultural product to KhadBhandu.
+                    Add a new agricultural product to KisanSaathi.
 
                 </p>
 

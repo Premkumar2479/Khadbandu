@@ -8,7 +8,7 @@
 
                 <h4 class="footer-brand">
                     <i class="bi bi-flower1"></i>
-                    KhadBhandu
+                    KisanSaathi
                 </h4>
 
                 <p>
@@ -55,7 +55,7 @@
 
                 <p>
                     <i class="bi bi-envelope"></i>
-                    support@khadbhandu.com
+                    support@KisanSaathi.com
                 </p>
 
             </div>
@@ -67,7 +67,7 @@
         <div class="text-center pb-3">
 
             <small>
-                © <?= date('Y') ?> KhadBhandu. All Rights Reserved.
+                © <?= date('Y') ?> KisanSaathi. All Rights Reserved.
             </small>
 
         </div>

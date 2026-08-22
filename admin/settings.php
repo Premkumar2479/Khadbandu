@@ -4,7 +4,7 @@ require_once "includes/admin-auth.php";
 
 require_once "../config/database.php";
 
-$pageTitle = "Settings - KhadBhandu";
+$pageTitle = "Settings - KisanSaathi";
 
 ?>
 
@@ -22,7 +22,7 @@ $pageTitle = "Settings - KhadBhandu";
     >
 
     <title>
-        Settings - KhadBhandu
+        Settings - KisanSaathi
     </title>
 
     <link
@@ -57,7 +57,7 @@ $pageTitle = "Settings - KhadBhandu";
         <div class="card-body">
 
             <h4>
-                KhadBhandu Admin Settings
+                KisanSaathi Admin Settings
             </h4>
 
             <hr>
@@ -71,7 +71,7 @@ $pageTitle = "Settings - KhadBhandu";
                 <input
                     type="text"
                     class="form-control"
-                    value="KhadBhandu"
+                    value="KisanSaathi"
                 >
 
             </div>
@@ -86,7 +86,7 @@ $pageTitle = "Settings - KhadBhandu";
                 <input
                     type="email"
                     class="form-control"
-                    value="admin@khadbhandu.com"
+                    value="admin@KisanSaathi.com"
                 >
 
             </div>

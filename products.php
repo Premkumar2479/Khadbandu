@@ -1,6 +1,6 @@
 <?php
 
-$pageTitle = "Products - KhadBhandu";
+$pageTitle = "Products - KisanSaathi";
 
 require_once "config/database.php";
 
@@ -19,7 +19,7 @@ require_once "config/database.php";
 
         <div class="section-heading text-center mb-5">
 
-            <span>KHADBhandu STORE</span>
+            <span>KisanSaathi STORE</span>
 
             <h1>Our Agricultural Products</h1>
 

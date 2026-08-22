@@ -4,7 +4,7 @@ require_once "includes/admin-auth.php";
 
 // require_once "../config/database.php";
 
-$pageTitle = "Orders - KhadBhandu";
+$pageTitle = "Orders - KisanSaathi";
 session_start();
 
 require_once "config/database.php";
@@ -38,7 +38,7 @@ $result = $stmt->get_result();
 
 <?php
 
-$pageTitle = "My Orders - KhadBhandu";
+$pageTitle = "My Orders - KisanSaathi";
 
 include "includes/header.php";
 include "includes/navbar.php";

@@ -3,8 +3,8 @@
 require_once "config/database.php";
 
 
-$name = "KhadBhandu Admin";
-$email = "admin@khadbhandu.com";
+$name = "KisanSaathi Admin";
+$email = "admin@KisanSaathi.com";
 $password = "Admin@12345";
 
 

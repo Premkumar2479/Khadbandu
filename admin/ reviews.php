@@ -4,7 +4,7 @@ require_once "includes/admin-auth.php";
 
 require_once "../config/database.php";
 
-$pageTitle = "Reviews - KhadBhandu";
+$pageTitle = "Reviews - KisanSaathi";
 
 
 $result = $conn->query("
@@ -43,7 +43,7 @@ $result = $conn->query("
     >
 
     <title>
-        Reviews - KhadBhandu
+        Reviews - KisanSaathi
     </title>
 
     <link
