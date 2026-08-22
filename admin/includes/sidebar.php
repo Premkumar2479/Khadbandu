@@ -20,7 +20,7 @@ $currentPage =
 
         <div>
 
-            <h4>KhadBhandu</h4>
+            <h4>KisanSaathi</h4>
 
             <span>ADMIN PANEL</span>
 

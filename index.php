@@ -91,94 +91,485 @@ require_once "config/database.php";
 
 </section> -->
 
+<!-- =========================================================
+     KISANSAATHI HERO SECTION
+========================================================= -->
 
-<!-- HERO IMAGE SLIDER -->
+<section class="ks-hero">
 
-<div class="col-lg-6">
-    <div
-        id="heroCarousel"
-        class="carousel slide hero-slider"
-        data-bs-ride="carousel"
-        data-bs-interval="3500"
-    >
+    <div class="container">
 
-        <div class="carousel-inner rounded-4 overflow-hidden">
+        <div class="row align-items-center g-5">
 
-            <!-- SLIDE 1 -->
+            <!-- =================================================
+                 LEFT CONTENT
+            ================================================== -->
 
-            <div class="carousel-item active">
+            <div class="col-lg-5">
 
-                <img
-                    src="assets/images/hero/hero-1.jpg"
-                    class="d-block w-100"
-                    alt="Smart Farming"
-                >
+                <div class="ks-hero-content">
 
-                <div class="hero-slide-caption">
+                    <!-- Badge -->
 
-                    <h3>
-                        Quality Farming Products
-                    </h3>
+                    <div class="ks-hero-badge">
 
-                    <p>
-                        Everything farmers need in one place.
+                        <span>🌱</span>
+
+                        Trusted Agriculture Marketplace
+
+                    </div>
+
+
+                    <!-- Heading -->
+
+                    <h1>
+
+                        Smart Farming.
+
+                        <span>
+                            Better Harvest.
+                        </span>
+
+                    </h1>
+
+
+                    <!-- Description -->
+
+                    <p class="ks-hero-description">
+
+                        Quality fertilizers, seeds, pesticides
+                        and farming products — all in one place.
+
                     </p>
+
+
+                    <!-- Buttons -->
+
+                    <div class="ks-hero-buttons">
+
+                        <a
+                            href="products.php"
+                            class="ks-btn-primary"
+                        >
+
+                            Shop Products
+
+                            <span>→</span>
+
+                        </a>
+
+
+                        <a
+                            href="categories.php"
+                            class="ks-btn-outline"
+                        >
+
+                            Explore Categories
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Trust Statistics -->
+
+                    <div class="ks-hero-stats">
+
+                        <div class="ks-stat">
+
+                            <strong>
+                                10,000+
+                            </strong>
+
+                            <span>
+                                Happy Farmers
+                            </span>
+
+                        </div>
+
+
+                        <div class="ks-stat">
+
+                            <strong>
+                                100%
+                            </strong>
+
+                            <span>
+                                Quality Assured
+                            </span>
+
+                        </div>
+
+
+                        <div class="ks-stat">
+
+                            <strong>
+                                Fast
+                            </strong>
+
+                            <span>
+                                Delivery
+                            </span>
+
+                        </div>
+
+
+                        <div class="ks-stat">
+
+                            <strong>
+                                24/7
+                            </strong>
+
+                            <span>
+                                Support
+                            </span>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <!-- SLIDE 2 -->
+            <!-- =================================================
+                 RIGHT IMAGE SLIDER
+            ================================================== -->
 
-            <div class="carousel-item">
+            <div class="col-lg-7">
 
-                <img
-                    src="assets/images/hero/hero-2.jpg"
-                    class="d-block w-100"
-                    alt="Agriculture"
+                <div
+                    id="heroCarousel"
+                    class="carousel slide ks-hero-slider"
+                    data-bs-ride="carousel"
+                    data-bs-interval="3500"
+                    data-bs-pause="hover"
                 >
 
-                <div class="hero-slide-caption">
 
-                    <h3>
-                        Better Seeds
-                    </h3>
+                    <!-- =================================================
+                         SLIDES
+                    ================================================== -->
 
-                    <p>
-                        Grow healthier and stronger crops.
-                    </p>
-
-                </div>
-
-            </div>
+                    <div class="carousel-inner">
 
 
-            <!-- SLIDE 3 -->
+                        <!-- ===============================
+                             SLIDE 1
+                        ================================ -->
 
-            <div class="carousel-item">
+                        <div
+                            class="carousel-item active"
+                        >
 
-                <img
-                    src="assets/images/hero/hero-3.jpg"
-                    class="d-block w-100"
-                    alt="Farming"
-                >
+                            <div class="ks-slide">
 
-                <div class="hero-slide-caption">
+                                <img
+                                    src="assets/images/hero/hero-1.jpg"
+                                    alt="Smart Farming"
+                                    class="ks-slide-image"
+                                >
 
-                    <h3>
-                        Smart Farming
-                    </h3>
 
-                    <p>
-                        Better products. Better harvest.
-                    </p>
+                                <div class="ks-slide-overlay"></div>
+
+
+                                <div class="ks-slide-caption">
+
+                                    <span>
+                                        🌱 KisanSaathi
+                                    </span>
+
+                                    <h2>
+                                        Quality Farming Products
+                                    </h2>
+
+                                    <p>
+                                        Everything farmers need
+                                        in one place.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ===============================
+                             SLIDE 2
+                        ================================ -->
+
+                        <div
+                            class="carousel-item"
+                        >
+
+                            <div class="ks-slide">
+
+                                <img
+                                    src="assets/images/hero/hero-2.jpg"
+                                    alt="Quality Seeds"
+                                    class="ks-slide-image"
+                                >
+
+
+                                <div class="ks-slide-overlay"></div>
+
+
+                                <div class="ks-slide-caption">
+
+                                    <span>
+                                        🌾 Better Seeds
+                                    </span>
+
+                                    <h2>
+                                        Grow Healthier Crops
+                                    </h2>
+
+                                    <p>
+                                        Choose quality seeds
+                                        for better production.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ===============================
+                             SLIDE 3
+                        ================================ -->
+
+                        <div
+                            class="carousel-item"
+                        >
+
+                            <div class="ks-slide">
+
+                                <img
+                                    src="assets/images/hero/hero-3.jpg"
+                                    alt="Agricultural Fertilizers"
+                                    class="ks-slide-image"
+                                >
+
+
+                                <div class="ks-slide-overlay"></div>
+
+
+                                <div class="ks-slide-caption">
+
+                                    <span>
+                                        🌿 Trusted Fertilizers
+                                    </span>
+
+                                    <h2>
+                                        Nourish Your Crops
+                                    </h2>
+
+                                    <p>
+                                        Reliable fertilizers
+                                        for healthy crop growth.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ===============================
+                             SLIDE 4
+                        ================================ -->
+
+                        <div
+                            class="carousel-item"
+                        >
+
+                            <div class="ks-slide">
+
+                                <img
+                                    src="assets/images/hero/hero-4.jpg"
+                                    alt="Modern Farming"
+                                    class="ks-slide-image"
+                                >
+
+
+                                <div class="ks-slide-overlay"></div>
+
+
+                                <div class="ks-slide-caption">
+
+                                    <span>
+                                        🚜 Modern Farming
+                                    </span>
+
+                                    <h2>
+                                        Farm Smarter
+                                    </h2>
+
+                                    <p>
+                                        Discover tools and products
+                                        for modern agriculture.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ===============================
+                             SLIDE 5
+                        ================================ -->
+
+                        <div
+                            class="carousel-item"
+                        >
+
+                            <div class="ks-slide">
+
+                                <img
+                                    src="assets/images/hero/hero-5.jpg"
+                                    alt="Better Harvest"
+                                    class="ks-slide-image"
+                                >
+
+
+                                <div class="ks-slide-overlay"></div>
+
+
+                                <div class="ks-slide-caption">
+
+                                    <span>
+                                        🌱 Better Farming
+                                    </span>
+
+                                    <h2>
+                                        Better Harvest
+                                    </h2>
+
+                                    <p>
+                                        Quality products for
+                                        stronger and healthier crops.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         PREVIOUS BUTTON
+                    ================================================== -->
+
+                    <button
+                        class="carousel-control-prev ks-slider-prev"
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide="prev"
+                        aria-label="Previous slide"
+                    >
+
+                        <span class="ks-arrow">
+                            ←
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- =================================================
+                         NEXT BUTTON
+                    ================================================== -->
+
+                    <button
+                        class="carousel-control-next ks-slider-next"
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide="next"
+                        aria-label="Next slide"
+                    >
+
+                        <span class="ks-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- =================================================
+                         SLIDE INDICATORS
+                    ================================================== -->
+
+                    <div class="carousel-indicators ks-slider-indicators">
+
+                        <button
+                            type="button"
+                            data-bs-target="#heroCarousel"
+                            data-bs-slide-to="0"
+                            class="active"
+                            aria-current="true"
+                            aria-label="Slide 1"
+                        ></button>
+
+
+                        <button
+                            type="button"
+                            data-bs-target="#heroCarousel"
+                            data-bs-slide-to="1"
+                            aria-label="Slide 2"
+                        ></button>
+
+
+                        <button
+                            type="button"
+                            data-bs-target="#heroCarousel"
+                            data-bs-slide-to="2"
+                            aria-label="Slide 3"
+                        ></button>
+
+
+                        <button
+                            type="button"
+                            data-bs-target="#heroCarousel"
+                            data-bs-slide-to="3"
+                            aria-label="Slide 4"
+                        ></button>
+
+
+                        <button
+                            type="button"
+                            data-bs-target="#heroCarousel"
+                            data-bs-slide-to="4"
+                            aria-label="Slide 5"
+                        ></button>
+
+                    </div>
 
                 </div>
 
             </div>
 
         </div>
+
+    </div>
+
+</section>
 
 
         <!-- PREVIOUS -->

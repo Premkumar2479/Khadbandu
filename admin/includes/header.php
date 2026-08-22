@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once __DIR__ . "/../../config/database.php";
 
-$pageTitle = $pageTitle ?? "Admin Dashboard - KhadBhandu";
+$pageTitle = $pageTitle ?? "Admin Dashboard - KisanSaathi";
 
 ?>
 

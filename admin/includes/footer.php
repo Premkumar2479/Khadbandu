@@ -4,7 +4,7 @@
 <footer class="admin-footer">
 
     <span>
-        © <?= date('Y') ?> KhadBhandu
+        © <?= date('Y') ?> KisanSaathi
     </span>
 
     <span>
