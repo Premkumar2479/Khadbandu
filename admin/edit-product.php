@@ -215,7 +215,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ");
 
             $stmt->bind_param(
-                "sssdii si",
+                "sssdiisi",
                 $name,
                 $brand,
                 $description,

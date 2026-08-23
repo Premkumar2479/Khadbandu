@@ -4,134 +4,18 @@ session_start();
 
 require_once "../config/database.php";
 
-
 /*
 |--------------------------------------------------------------------------
-| ADMIN AUTHENTICATION
+| ADMIN LOGIN CHECK
 |--------------------------------------------------------------------------
 */
 
 if (!isset($_SESSION['admin_id'])) {
-
     header("Location: login.php");
-
     exit;
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| PAGE TITLE
-|--------------------------------------------------------------------------
-*/
-
 $pageTitle = "Manage Products - KisanSaathi";
-
-
-/*
-|--------------------------------------------------------------------------
-| DELETE PRODUCT
-|--------------------------------------------------------------------------
-*/
-
-$deleteMessage = "";
-$deleteError = "";
-
-
-if ($_SERVER["REQUEST_METHOD"] === "POST"
-    && isset($_POST['delete_product'])) {
-
-
-    $productId = (int) ($_POST['product_id'] ?? 0);
-
-
-    if ($productId > 0) {
-
-
-        /*
-        | Get image before deleting product
-        */
-
-        $imageStmt = $conn->prepare(
-            "SELECT image
-             FROM products
-             WHERE id = ?
-             LIMIT 1"
-        );
-
-        $imageStmt->bind_param(
-            "i",
-            $productId
-        );
-
-        $imageStmt->execute();
-
-        $imageResult =
-            $imageStmt->get_result();
-
-        $productImage =
-            $imageResult->fetch_assoc();
-
-
-        /*
-        | Delete product
-        */
-
-        $deleteStmt = $conn->prepare(
-            "DELETE FROM products
-             WHERE id = ?"
-        );
-
-        $deleteStmt->bind_param(
-            "i",
-            $productId
-        );
-
-
-        if ($deleteStmt->execute()) {
-
-
-            /*
-            | Delete image from server
-            */
-
-            if (
-                $productImage &&
-                !empty($productImage['image'])
-            ) {
-
-                $imagePath =
-                    "../assets/images/products/"
-                    . basename($productImage['image']);
-
-
-                if (
-                    file_exists($imagePath)
-                    && is_file($imagePath)
-                ) {
-
-                    unlink($imagePath);
-
-                }
-
-            }
-
-
-            $deleteMessage =
-                "Product deleted successfully.";
-
-
-        } else {
-
-            $deleteError =
-                "Unable to delete product.";
-
-        }
-
-    }
-
-}
-
 
 /*
 |--------------------------------------------------------------------------
@@ -139,167 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"
 |--------------------------------------------------------------------------
 */
 
-$search =
-    trim($_GET['search'] ?? '');
-
-
-/*
-|--------------------------------------------------------------------------
-| CATEGORY FILTER
-|--------------------------------------------------------------------------
-*/
-
-$categoryId =
-    (int) ($_GET['category'] ?? 0);
-
-
-/*
-|--------------------------------------------------------------------------
-| PAGINATION
-|--------------------------------------------------------------------------
-*/
-
-$limit = 10;
-
-$page =
-    max(1, (int) ($_GET['page'] ?? 1));
-
-$offset =
-    ($page - 1) * $limit;
-
-
-/*
-|--------------------------------------------------------------------------
-| CATEGORY LIST
-|--------------------------------------------------------------------------
-*/
-
-$categories = [];
-
-$categoryResult = $conn->query(
-    "SELECT id, name
-     FROM categories
-     ORDER BY name ASC"
-);
-
-
-if ($categoryResult) {
-
-    while (
-        $category =
-        $categoryResult->fetch_assoc()
-    ) {
-
-        $categories[] = $category;
-
-    }
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| BUILD WHERE CONDITION
-|--------------------------------------------------------------------------
-*/
-
-$where = [];
-
-$params = [];
-
-$types = "";
-
-
-if ($search !== "") {
-
-    $where[] =
-        "(p.name LIKE ?
-          OR p.brand LIKE ?)";
-
-    $searchValue =
-        "%" . $search . "%";
-
-    $params[] = $searchValue;
-    $params[] = $searchValue;
-
-    $types .= "ss";
-
-}
-
-
-if ($categoryId > 0) {
-
-    $where[] =
-        "p.category_id = ?";
-
-    $params[] =
-        $categoryId;
-
-    $types .= "i";
-
-}
-
-
-$whereSQL = "";
-
-if (!empty($where)) {
-
-    $whereSQL =
-        "WHERE " . implode(
-            " AND ",
-            $where
-        );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| TOTAL PRODUCTS
-|--------------------------------------------------------------------------
-*/
-
-$countSQL = "
-    SELECT COUNT(*) AS total
-    FROM products p
-    $whereSQL
-";
-
-
-$countStmt =
-    $conn->prepare($countSQL);
-
-
-if (!empty($params)) {
-
-    $countStmt->bind_param(
-        $types,
-        ...$params
-    );
-
-}
-
-
-$countStmt->execute();
-
-$countResult =
-    $countStmt->get_result();
-
-$countRow =
-    $countResult->fetch_assoc();
-
-$totalProducts =
-    (int) ($countRow['total'] ?? 0);
-
-
-$totalPages =
-    max(
-        1,
-        (int) ceil(
-            $totalProducts / $limit
-        )
-    );
-
+$search = trim($_GET['search'] ?? '');
 
 /*
 |--------------------------------------------------------------------------
@@ -307,182 +31,351 @@ $totalPages =
 |--------------------------------------------------------------------------
 */
 
-$productSQL = "
-    SELECT
-        p.id,
-        p.name,
-        p.brand,
-        p.description,
-        p.price,
-        p.stock,
-        p.image,
-        p.category_id,
-        c.name AS category_name
+if ($search !== '') {
 
-    FROM products p
+    $searchTerm = "%" . $search . "%";
 
-    LEFT JOIN categories c
-        ON p.category_id = c.id
+    $stmt = $conn->prepare("
+        SELECT
+            products.*,
+            categories.name AS category_name
+        FROM products
+        LEFT JOIN categories
+            ON products.category_id = categories.id
+        WHERE
+            products.name LIKE ?
+            OR products.brand LIKE ?
+            OR products.description LIKE ?
+            OR categories.name LIKE ?
+        ORDER BY products.id DESC
+    ");
 
-    $whereSQL
+    $stmt->bind_param(
+        "ssss",
+        $searchTerm,
+        $searchTerm,
+        $searchTerm,
+        $searchTerm
+    );
 
-    ORDER BY p.id DESC
+    $stmt->execute();
 
-    LIMIT ?
-    OFFSET ?
-";
+    $result = $stmt->get_result();
 
+} else {
 
-$productStmt =
-    $conn->prepare($productSQL);
-
+    $result = $conn->query("
+        SELECT
+            products.*,
+            categories.name AS category_name
+        FROM products
+        LEFT JOIN categories
+            ON products.category_id = categories.id
+        ORDER BY products.id DESC
+    ");
+}
 
 /*
 |--------------------------------------------------------------------------
-| BIND PRODUCT QUERY
+| PRODUCT COUNT
 |--------------------------------------------------------------------------
 */
 
-$productParams =
-    $params;
+$countResult = $conn->query("
+    SELECT COUNT(*) AS total
+    FROM products
+");
 
-$productParams[] =
-    $limit;
+$productCount = 0;
 
-$productParams[] =
-    $offset;
-
-
-$productTypes =
-    $types . "ii";
-
-
-$productStmt->bind_param(
-    $productTypes,
-    ...$productParams
-);
-
-
-$productStmt->execute();
-
-
-$productResult =
-    $productStmt->get_result();
-
-
-$products = [];
-
-
-while (
-    $product =
-    $productResult->fetch_assoc()
-) {
-
-    $products[] =
-        $product;
-
+if ($countResult) {
+    $productCount = $countResult->fetch_assoc()['total'];
 }
-
-
-include "includes/header.php";
-
-include "includes/sidebar.php";
 
 ?>
 
+<!DOCTYPE html>
 
-<div class="admin-main">
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        <?= htmlspecialchars($pageTitle) ?>
+    </title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        body {
+            background: #f5f7f6;
+        }
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: #198754;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 25px 15px;
+        }
+
+        .sidebar-brand {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(255,255,255,0.18);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .top-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+        }
+
+        .product-image {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .image-placeholder {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 25px;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
 
 
-    <!-- TOPBAR -->
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
 
-    <header class="admin-topbar">
+<div class="sidebar">
 
+    <div class="sidebar-brand">
+
+        🌱 KisanSaathi
+
+        <small
+            class="d-block"
+            style="font-size:12px;"
+        >
+            Admin Panel
+        </small>
+
+    </div>
+
+
+    <a href="index.php">
+
+        <i class="bi bi-speedometer2 me-2"></i>
+
+        Dashboard
+
+    </a>
+
+
+    <a
+        href="products.php"
+        class="active"
+    >
+
+        <i class="bi bi-box-seam me-2"></i>
+
+        Products
+
+    </a>
+
+
+    <a href="orders.php">
+
+        <i class="bi bi-cart-check me-2"></i>
+
+        Orders
+
+    </a>
+
+
+    <a href="customers.php">
+
+        <i class="bi bi-people me-2"></i>
+
+        Customers
+
+    </a>
+
+
+    <a href="reviews.php">
+
+        <i class="bi bi-star me-2"></i>
+
+        Reviews
+
+    </a>
+
+
+    <a href="analytics.php">
+
+        <i class="bi bi-bar-chart-line me-2"></i>
+
+        Analytics
+
+    </a>
+
+
+    <a href="settings.php">
+
+        <i class="bi bi-gear me-2"></i>
+
+        Settings
+
+    </a>
+
+
+    <hr class="border-light">
+
+
+    <a
+        href="../index.php"
+        target="_blank"
+    >
+
+        <i class="bi bi-globe me-2"></i>
+
+        Visit Website
+
+    </a>
+
+
+    <a href="logout.php">
+
+        <i class="bi bi-box-arrow-right me-2"></i>
+
+        Logout
+
+    </a>
+
+</div>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<div class="main-content">
+
+
+    <!-- HEADER -->
+
+    <div
+        class="d-flex justify-content-between align-items-center mb-4"
+    >
 
         <div>
 
-            <h2 class="admin-page-title">
+            <h2 class="fw-bold mb-1">
 
                 Products
 
             </h2>
 
-        </div>
+            <p class="text-muted mb-0">
 
+                Manage your agricultural products
 
-        <div class="admin-topbar-right">
-
-
-            <div class="admin-notification">
-
-                <i class="bi bi-bell"></i>
-
-            </div>
-
-
-            <div class="admin-user">
-
-                <div class="admin-avatar">
-
-                    A
-
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        Administrator
-                    </strong>
-
-                    <div
-                        style="
-                            font-size:11px;
-                            color:#98a2b3;
-                        "
-                    >
-
-                        Admin
-
-                    </div>
-
-                </div>
-
-            </div>
-
+            </p>
 
         </div>
 
 
-    </header>
+        <div>
 
+            <span class="me-3">
 
-    <!-- CONTENT -->
+                <i class="bi bi-person-circle"></i>
 
-    <section class="admin-content">
+                <?= htmlspecialchars(
+                    $_SESSION['admin_name'] ?? 'Admin'
+                ) ?>
 
-
-        <!-- PAGE HEADER -->
-
-        <div class="products-page-header">
-
-
-            <div>
-
-                <h1>
-
-                    Manage Products
-
-                </h1>
-
-
-                <p>
-
-                    Add, edit and manage your agricultural products.
-
-                </p>
-
-            </div>
+            </span>
 
 
             <a
@@ -490,790 +383,518 @@ include "includes/sidebar.php";
                 class="btn btn-success"
             >
 
-                <i class="bi bi-plus-lg"></i>
+                <i class="bi bi-plus-circle"></i>
 
                 Add Product
 
             </a>
 
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STAT
+    ====================================================== -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="card top-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <small class="text-muted">
+
+                                Total Products
+
+                            </small>
+
+                            <h3 class="fw-bold mb-0">
+
+                                <?= (int)$productCount ?>
+
+                            </h3>
+
+                        </div>
+
+
+                        <div
+                            class="text-success"
+                            style="font-size:35px;"
+                        >
+
+                            <i class="bi bi-box-seam"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-
-        <!-- SUCCESS MESSAGE -->
-
-        <?php if ($deleteMessage): ?>
-
-            <div class="alert alert-success">
-
-                <i class="bi bi-check-circle"></i>
-
-                <?= htmlspecialchars(
-                    $deleteMessage
-                ) ?>
-
-            </div>
-
-        <?php endif; ?>
+    </div>
 
 
-        <!-- ERROR MESSAGE -->
 
-        <?php if ($deleteError): ?>
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
 
-            <div class="alert alert-danger">
+    <div class="card top-card mb-4">
 
-                <i class="bi bi-exclamation-circle"></i>
-
-                <?= htmlspecialchars(
-                    $deleteError
-                ) ?>
-
-            </div>
-
-        <?php endif; ?>
-
-
-        <!-- FILTER CARD -->
-
-        <div class="admin-card product-filter-card">
-
+        <div class="card-body">
 
             <form
                 method="GET"
-                class="product-filter-form"
+                action="products.php"
             >
 
+                <div class="row g-2">
 
-                <!-- SEARCH -->
-
-                <div class="product-search">
-
-                    <label>
-
-                        Search Product
-
-                    </label>
-
-
-                    <div class="search-input-wrapper">
-
-                        <i class="bi bi-search"></i>
-
+                    <div class="col-md-10">
 
                         <input
                             type="text"
                             name="search"
-                            value="<?= htmlspecialchars(
-                                $search
-                            ) ?>"
-                            placeholder="Search by name or brand..."
                             class="form-control"
+                            placeholder="Search product, brand or category..."
+                            value="<?= htmlspecialchars($search) ?>"
                         >
+
+                    </div>
+
+
+                    <div class="col-md-2">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success w-100"
+                        >
+
+                            <i class="bi bi-search"></i>
+
+                            Search
+
+                        </button>
 
                     </div>
 
                 </div>
 
-
-                <!-- CATEGORY -->
-
-                <div>
-
-                    <label>
-
-                        Category
-
-                    </label>
-
-
-                    <select
-                        name="category"
-                        class="form-select"
-                    >
-
-                        <option value="0">
-
-                            All Categories
-
-                        </option>
-
-
-                        <?php foreach (
-                            $categories
-                            as $category
-                        ): ?>
-
-                            <option
-                                value="<?= (int) $category['id'] ?>"
-                                <?= $categoryId ===
-                                    (int) $category['id']
-                                    ? 'selected'
-                                    : '' ?>
-                            >
-
-                                <?= htmlspecialchars(
-                                    $category['name']
-                                ) ?>
-
-                            </option>
-
-                        <?php endforeach; ?>
-
-                    </select>
-
-                </div>
-
-
-                <!-- BUTTON -->
-
-                <div class="filter-buttons">
-
-                    <button
-                        type="submit"
-                        class="btn btn-success"
-                    >
-
-                        <i class="bi bi-search"></i>
-
-                        Search
-
-                    </button>
-
-
-                    <a
-                        href="products.php"
-                        class="btn btn-outline-secondary"
-                    >
-
-                        Reset
-
-                    </a>
-
-                </div>
-
-
             </form>
-
 
         </div>
 
-
-        <!-- PRODUCT TABLE CARD -->
-
-        <div class="admin-card">
+    </div>
 
 
-            <div class="admin-card-header">
+
+    <!-- =====================================================
+         PRODUCTS TABLE
+    ====================================================== -->
+
+    <div class="card top-card">
+
+        <div class="card-body">
+
+            <div
+                class="d-flex justify-content-between align-items-center mb-3"
+            >
+
+                <h5 class="fw-bold mb-0">
+
+                    All Products
+
+                </h5>
 
 
-                <div>
+                <?php if ($search !== ''): ?>
 
-                    <h3>
-
-                        All Products
-
-                    </h3>
-
-
-                    <small
-                        style="
-                            color:#98a2b3;
-                        "
+                    <a
+                        href="products.php"
+                        class="btn btn-sm btn-outline-secondary"
                     >
 
-                        <?= $totalProducts ?>
+                        Clear Search
 
-                        product(s) found
+                    </a>
 
-                    </small>
-
-                </div>
-
+                <?php endif; ?>
 
             </div>
 
 
-            <?php if (
-                count($products) > 0
-            ): ?>
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Image</th>
+
+                            <th>Product</th>
+
+                            <th>Brand</th>
+
+                            <th>Category</th>
+
+                            <th>Price</th>
+
+                            <th>Stock</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
 
 
-                <div class="table-responsive">
-
-                    <table class="admin-table products-table">
+                    <tbody>
 
 
-                        <thead>
+                    <?php if (
+                        $result &&
+                        $result->num_rows > 0
+                    ): ?>
+
+
+                        <?php while (
+                            $product =
+                            $result->fetch_assoc()
+                        ): ?>
+
 
                             <tr>
 
-                                <th>
-                                    Product
-                                </th>
 
-                                <th>
-                                    Category
-                                </th>
+                                <!-- ID -->
 
-                                <th>
-                                    Brand
-                                </th>
+                                <td>
 
-                                <th>
-                                    Price
-                                </th>
+                                    <?= (int)$product['id'] ?>
 
-                                <th>
-                                    Stock
-                                </th>
+                                </td>
 
-                                <th>
-                                    Status
-                                </th>
 
-                                <th>
-                                    Actions
-                                </th>
+
+                                <!-- IMAGE -->
+
+                                <td>
+
+                                    <?php
+
+                                    $image =
+                                        trim(
+                                            $product['image'] ?? ''
+                                        );
+
+                                    $imagePath =
+                                        "../assets/images/products/" .
+                                        $image;
+
+                                    ?>
+
+
+                                    <?php if (
+                                        $image !== '' &&
+                                        file_exists($imagePath)
+                                    ): ?>
+
+                                        <img
+                                            src="<?= htmlspecialchars($imagePath) ?>"
+                                            alt="<?= htmlspecialchars($product['name']) ?>"
+                                            class="product-image"
+                                        >
+
+                                    <?php else: ?>
+
+                                        <div class="image-placeholder">
+
+                                            <i class="bi bi-image"></i>
+
+                                        </div>
+
+                                    <?php endif; ?>
+
+                                </td>
+
+
+
+                                <!-- NAME -->
+
+                                <td>
+
+                                    <strong>
+
+                                        <?= htmlspecialchars(
+                                            $product['name']
+                                        ) ?>
+
+                                    </strong>
+
+                                    <br>
+
+                                    <small class="text-muted">
+
+                                        <?= htmlspecialchars(
+                                            mb_substr(
+                                                strip_tags(
+                                                    $product['description'] ?? ''
+                                                ),
+                                                0,
+                                                60
+                                            )
+                                        ) ?>
+
+                                    </small>
+
+                                </td>
+
+
+
+                                <!-- BRAND -->
+
+                                <td>
+
+                                    <?= htmlspecialchars(
+                                        $product['brand']
+                                        ?? 'KisanSaathi'
+                                    ) ?>
+
+                                </td>
+
+
+
+                                <!-- CATEGORY -->
+
+                                <td>
+
+                                    <span
+                                        class="badge bg-success-subtle text-success"
+                                    >
+
+                                        <?= htmlspecialchars(
+                                            $product['category_name']
+                                            ?? 'Agriculture'
+                                        ) ?>
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- PRICE -->
+
+                                <td>
+
+                                    <strong>
+
+                                        ₹<?= number_format(
+                                            (float)$product['price'],
+                                            2
+                                        ) ?>
+
+                                    </strong>
+
+                                </td>
+
+
+
+                                <!-- STOCK -->
+
+                                <td>
+
+                                    <?php if (
+                                        (int)$product['stock'] > 0
+                                    ): ?>
+
+                                        <span
+                                            class="badge bg-success"
+                                        >
+
+                                            <?= (int)$product['stock'] ?>
+
+                                        </span>
+
+                                    <?php else: ?>
+
+                                        <span
+                                            class="badge bg-danger"
+                                        >
+
+                                            Out of Stock
+
+                                        </span>
+
+                                    <?php endif; ?>
+
+                                </td>
+
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    <div class="action-buttons">
+
+
+                                        <!-- EDIT -->
+
+                                        <a
+                                            href="edit-product.php?id=<?= (int)$product['id'] ?>"
+                                            class="btn btn-sm btn-outline-success"
+                                        >
+
+                                            <i class="bi bi-pencil"></i>
+
+                                            Edit
+
+                                        </a>
+
+
+
+                                        <!-- VIEW -->
+
+                                        <a
+                                            href="../product-details.php?id=<?= (int)$product['id'] ?>"
+                                            class="btn btn-sm btn-outline-primary"
+                                            target="_blank"
+                                        >
+
+                                            <i class="bi bi-eye"></i>
+
+                                            View
+
+                                        </a>
+
+
+
+                                        <!-- DELETE -->
+
+                                        <a
+                                            href="delete-product.php?id=<?= (int)$product['id'] ?>"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Are you sure you want to delete this product?');"
+                                        >
+
+                                            <i class="bi bi-trash"></i>
+
+                                            Delete
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
 
                             </tr>
 
-                        </thead>
+
+                        <?php endwhile; ?>
 
 
-                        <tbody>
+                    <?php else: ?>
 
 
-                            <?php foreach (
-                                $products
-                                as $product
-                            ): ?>
+                        <tr>
+
+                            <td
+                                colspan="8"
+                                class="text-center py-5"
+                            >
+
+                                <i
+                                    class="bi bi-box-seam text-muted"
+                                    style="font-size:50px;"
+                                ></i>
+
+                                <h5 class="mt-3">
+
+                                    No Products Found
+
+                                </h5>
 
 
-                                <tr>
+                                <?php if ($search !== ''): ?>
 
+                                    <p class="text-muted">
 
-                                    <!-- PRODUCT -->
-
-                                    <td>
-
-                                        <div
-                                            class="admin-product-info"
-                                        >
-
-
-                                            <div
-                                                class="admin-product-image"
-                                            >
-
-                                                <?php
-
-                                                $image =
-                                                    $product['image']
-                                                    ?? '';
-
-                                                $imagePath =
-                                                    "../assets/images/products/"
-                                                    . $image;
-
-                                                ?>
-
-
-                                                <?php if (
-                                                    !empty($image)
-                                                    &&
-                                                    file_exists(
-                                                        $imagePath
-                                                    )
-                                                ): ?>
-
-                                                    <img
-                                                        src="<?= htmlspecialchars(
-                                                            $imagePath
-                                                        ) ?>"
-                                                        alt="<?= htmlspecialchars(
-                                                            $product['name']
-                                                        ) ?>"
-                                                    >
-
-                                                <?php else: ?>
-
-                                                    <div
-                                                        class="product-image-placeholder"
-                                                    >
-
-                                                        <i
-                                                            class="bi bi-flower1"
-                                                        ></i>
-
-                                                    </div>
-
-                                                <?php endif; ?>
-
-
-                                            </div>
-
-
-                                            <div>
-
-                                                <div
-                                                    class="product-name"
-                                                >
-
-                                                    <?= htmlspecialchars(
-                                                        $product['name']
-                                                    ) ?>
-
-                                                </div>
-
-
-                                                <small
-                                                    style="
-                                                        color:#98a2b3;
-                                                    "
-                                                >
-
-                                                    ID:
-                                                    #<?= (int) $product['id'] ?>
-
-                                                </small>
-
-                                            </div>
-
-
-                                        </div>
-
-                                    </td>
-
-
-                                    <!-- CATEGORY -->
-
-                                    <td>
-
-                                        <?php if (
-                                            !empty(
-                                                $product['category_name']
-                                            )
-                                        ): ?>
-
-                                            <span
-                                                class="category-badge"
-                                            >
-
-                                                <?= htmlspecialchars(
-                                                    $product['category_name']
-                                                ) ?>
-
-                                            </span>
-
-                                        <?php else: ?>
-
-                                            <span
-                                                class="text-muted"
-                                            >
-
-                                                Uncategorized
-
-                                            </span>
-
-                                        <?php endif; ?>
-
-                                    </td>
-
-
-                                    <!-- BRAND -->
-
-                                    <td>
-
-                                        <?= htmlspecialchars(
-                                            $product['brand']
-                                            ?? '-'
-                                        ) ?>
-
-                                    </td>
-
-
-                                    <!-- PRICE -->
-
-                                    <td>
+                                        No product found for:
 
                                         <strong>
 
-                                            ₹<?= number_format(
-                                                (float)
-                                                $product['price'],
-                                                2
-                                            ) ?>
+                                            <?= htmlspecialchars($search) ?>
 
                                         </strong>
 
-                                    </td>
+                                    </p>
 
+                                <?php else: ?>
 
-                                    <!-- STOCK -->
+                                    <p class="text-muted">
 
-                                    <td>
+                                        No products have been added yet.
 
-                                        <?= (int)
-                                            $product['stock'] ?>
+                                    </p>
 
-                                    </td>
+                                <?php endif; ?>
 
 
-                                    <!-- STATUS -->
+                                <a
+                                    href="add-product.php"
+                                    class="btn btn-success"
+                                >
 
-                                    <td>
+                                    <i class="bi bi-plus-circle"></i>
 
+                                    Add Product
 
-                                        <?php if (
-                                            (int)
-                                            $product['stock']
-                                            > 0
-                                        ): ?>
+                                </a>
 
-                                            <span
-                                                class="status-badge status-in-stock"
-                                            >
+                            </td>
 
-                                                <i
-                                                    class="bi bi-check-circle"
-                                                ></i>
-
-                                                In Stock
-
-                                            </span>
-
-                                        <?php else: ?>
-
-                                            <span
-                                                class="status-badge status-out-stock"
-                                            >
-
-                                                <i
-                                                    class="bi bi-x-circle"
-                                                ></i>
-
-                                                Out of Stock
-
-                                            </span>
-
-                                        <?php endif; ?>
-
-
-                                    </td>
-
-
-                                    <!-- ACTIONS -->
-
-                                    <td>
-
-
-                                        <div
-                                            class="product-actions"
-                                        >
-
-
-                                            <!-- VIEW -->
-
-                                            <a
-                                                href="../product-details.php?id=<?= (int) $product['id'] ?>"
-                                                target="_blank"
-                                                class="product-action-btn view"
-                                                title="View Product"
-                                            >
-
-                                                <i
-                                                    class="bi bi-eye"
-                                                ></i>
-
-                                            </a>
-
-
-                                            <!-- EDIT -->
-
-                                            <a
-                                                href="edit-product.php?id=<?= (int) $product['id'] ?>"
-                                                class="product-action-btn edit"
-                                                title="Edit Product"
-                                            >
-
-                                                <i
-                                                    class="bi bi-pencil"
-                                                ></i>
-
-                                            </a>
-
-
-                                            <!-- DELETE -->
-
-                                            <form
-                                                method="POST"
-                                                onsubmit="return confirmDelete(
-                                                    '<?= htmlspecialchars(
-                                                        addslashes(
-                                                            $product['name']
-                                                        )
-                                                    ) ?>'
-                                                );"
-                                                style="display:inline;"
-                                            >
-
-                                                <input
-                                                    type="hidden"
-                                                    name="product_id"
-                                                    value="<?= (int) $product['id'] ?>"
-                                                >
-
-
-                                                <button
-                                                    type="submit"
-                                                    name="delete_product"
-                                                    class="product-action-btn delete"
-                                                    title="Delete Product"
-                                                >
-
-                                                    <i
-                                                        class="bi bi-trash"
-                                                    ></i>
-
-                                                </button>
-
-                                            </form>
-
-
-                                        </div>
-
-
-                                    </td>
-
-
-                                </tr>
-
-
-                            <?php endforeach; ?>
-
-
-                        </tbody>
-
-
-                    </table>
-
-                </div>
-
-
-            <?php else: ?>
-
-
-                <!-- EMPTY STATE -->
-
-                <div
-                    class="products-empty-state"
-                >
-
-                    <div
-                        class="empty-icon"
-                    >
-
-                        <i
-                            class="bi bi-box-seam"
-                        ></i>
-
-                    </div>
-
-
-                    <h4>
-
-                        No Products Found
-
-                    </h4>
-
-
-                    <p>
-
-                        Try changing your search or add a new product.
-
-                    </p>
-
-
-                    <a
-                        href="add-product.php"
-                        class="btn btn-success"
-                    >
-
-                        <i class="bi bi-plus-lg"></i>
-
-                        Add Product
-
-                    </a>
-
-                </div>
-
-
-            <?php endif; ?>
-
-
-            <!-- PAGINATION -->
-
-            <?php if (
-                $totalPages > 1
-            ): ?>
-
-
-                <div class="product-pagination">
-
-
-                    <?php
-
-                    $queryBase = [];
-
-                    if ($search !== '') {
-
-                        $queryBase['search'] =
-                            $search;
-
-                    }
-
-                    if ($categoryId > 0) {
-
-                        $queryBase['category'] =
-                            $categoryId;
-
-                    }
-
-                    ?>
-
-
-                    <!-- PREVIOUS -->
-
-                    <?php if (
-                        $page > 1
-                    ): ?>
-
-
-                        <?php
-
-                        $queryBase['page'] =
-                            $page - 1;
-
-                        ?>
-
-
-                        <a
-                            href="products.php?<?= http_build_query(
-                                $queryBase
-                            ) ?>"
-                            class="pagination-btn"
-                        >
-
-                            <i
-                                class="bi bi-chevron-left"
-                            ></i>
-
-                        </a>
+                        </tr>
 
 
                     <?php endif; ?>
 
 
-                    <!-- PAGE NUMBERS -->
+                    </tbody>
 
-                    <?php for (
-                        $i = 1;
-                        $i <= $totalPages;
-                        $i++
-                    ): ?>
+                </table>
 
-
-                        <?php
-
-                        $queryBase['page'] =
-                            $i;
-
-                        ?>
-
-
-                        <a
-                            href="products.php?<?= http_build_query(
-                                $queryBase
-                            ) ?>"
-                            class="pagination-btn
-                            <?= $page === $i
-                                ? 'active'
-                                : '' ?>"
-                        >
-
-                            <?= $i ?>
-
-                        </a>
-
-
-                    <?php endfor; ?>
-
-
-                    <!-- NEXT -->
-
-                    <?php if (
-                        $page < $totalPages
-                    ): ?>
-
-
-                        <?php
-
-                        $queryBase['page'] =
-                            $page + 1;
-
-                        ?>
-
-
-                        <a
-                            href="products.php?<?= http_build_query(
-                                $queryBase
-                            ) ?>"
-                            class="pagination-btn"
-                        >
-
-                            <i
-                                class="bi bi-chevron-right"
-                            ></i>
-
-                        </a>
-
-
-                    <?php endif; ?>
-
-
-                </div>
-
-
-            <?php endif; ?>
-
+            </div>
 
         </div>
 
-
-    </section>
-
+    </div>
 
 </div>
 
 
-<script>
 
-function confirmDelete(productName) {
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
 
-    return confirm(
-        "Are you sure you want to delete \"" +
-        productName +
-        "\"?\n\nThis action cannot be undone."
-    );
+</body>
 
-}
-
-</script>
-
-
-<?php
-
-include "includes/footer.php";
-
-?>
+</html>

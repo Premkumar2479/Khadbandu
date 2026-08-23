@@ -830,7 +830,7 @@ require_once "config/database.php";
                     <div class="category-image">
 
                         <img
-                            src="assets/images/categories/micronutrients.jpg"
+                            src="assets/images/categories/image2.jpg"
                             alt="Micronutrients"
                         >
 
@@ -869,7 +869,7 @@ require_once "config/database.php";
                     <div class="category-image">
 
                         <img
-                            src="assets/images/categories/farm-tools.jpg"
+                            src="assets/images/categories/image1.jpg"
                             alt="Farm Tools"
                         >
 
