@@ -175,6 +175,10 @@ Phone
 Address
 </label>
 
+<label>
+Address 2
+</label>
+
 <textarea
     name="address"
     class="form-control"
