@@ -321,7 +321,7 @@ include "includes/navbar.php";
 
                     <label class="form-label">
 
-                        Phone
+                        Phone*
 
                     </label>
 
