@@ -200,7 +200,7 @@ include "includes/navbar.php";
 
                     <label class="form-label">
 
-                        Password
+                        Password 
 
                     </label>
 
@@ -233,7 +233,7 @@ include "includes/navbar.php";
 
             <p class="auth-footer">
 
-                Don't have an account?
+                Do not  have an account?
 
                 <a href="register.php">
 
